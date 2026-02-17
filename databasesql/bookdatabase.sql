@@ -27,7 +27,7 @@ constraint pk_id_category primary key (id_category)
 
 create table book_condition (
 id_condition int not null auto_increment,
-description varchar(50) not null,
-conservation decimal(5,2) not null,
+condition_description varchar(50) not null,
+price_depreciation decimal(5,2) not null,
 constraint pk_id_condition primary key (id_condition)
 );
