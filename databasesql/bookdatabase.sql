@@ -39,5 +39,17 @@ create table customers (
     cpf char(11) not null,
     Email varchar(100) not null,
     telefone varchar(15) not null,
-    endereco varchar(200) not null
+    endereco varchar(200) not null,
+    constraint pk_id_customers primary key (id_customers)
+);
+
+
+create table orders (
+    id_orders int not null,
+    id_customers int not null,
+    quantity_items int not null,
+    date_orders date not null,
+    current_status varchar(100) not null,
+    total_value decimal(10,2) not null,
+    constraint pk_id_orders primary key (id_orders)
 );
