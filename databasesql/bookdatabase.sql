@@ -53,3 +53,13 @@ create table orders (
     total_value decimal(10,2) not null,
     constraint pk_id_orders primary key (id_orders)
 );
+
+
+create table payment(
+    id_payment int not null,
+    id_orders int not null, 
+    payment_method varchar (50) not null,
+    date_payment date not null,
+    total_value decimal (10,20),
+    constraint pk_id_payment primary key (id_payment)
+);
