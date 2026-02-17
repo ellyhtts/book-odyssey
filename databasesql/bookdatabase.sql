@@ -15,3 +15,11 @@ name_writers varchar (80) not null,
 number_works int not null,
 constraint pk_id_publishers primary key (id_publishers)
 );
+
+
+create table categories (
+id_category int primary key auto_increment,
+gender varchar(100) not null,
+language varchar(50) not null
+);
+
