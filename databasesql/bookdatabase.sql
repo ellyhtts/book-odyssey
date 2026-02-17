@@ -31,3 +31,13 @@ condition_description varchar(50) not null,
 price_depreciation decimal(5,2) not null,
 constraint pk_id_condition primary key (id_condition)
 );
+
+
+create table customers (
+    id_customers int not null,
+    name_customers varchar(100) not null, 
+    cpf char(11) not null,
+    Email varchar(100) not null,
+    telefone varchar(15) not null,
+    endereco varchar(200) not null
+);
