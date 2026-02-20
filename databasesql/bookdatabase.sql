@@ -73,3 +73,10 @@ shipping_value decimal(10, 2) not null,
 constraint pk_id_shipping primary key (id_shipping)
 );
 
+
+create table supplier_coupons (
+id_supplier int not null,
+donated_books_quantity int not null,
+redemption_points int not null,
+constraint pk_id_supplier_coupon primary key (id_supplier)
+);
