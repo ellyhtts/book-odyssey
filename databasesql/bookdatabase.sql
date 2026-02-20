@@ -80,3 +80,4 @@ donated_books_quantity int not null,
 redemption_points int not null,
 constraint pk_id_supplier_coupon primary key (id_supplier)
 );
+
