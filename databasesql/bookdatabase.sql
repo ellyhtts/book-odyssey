@@ -65,10 +65,11 @@ create table payment(
 );
 
 
-CREATE TABLE customer_shipping (
-id_shipping SERIAL NOT NULL,
-tracking_code VARCHAR(50) NOT NULL,
-shipping_date DATE NOT NULL,
-shipping_value DECIMAL(10, 2) NOT NULL,
+create table customer_shipping (
+id_shipping serial not null,
+tracking_code varchar (50) not null,
+shipping_date date not null,
+shipping_value decimal(10, 2) not null,
 constraint pk_id_shipping primary key (id_shipping)
 );
+
