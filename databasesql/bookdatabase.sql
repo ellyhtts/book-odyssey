@@ -63,3 +63,12 @@ create table payment(
     total_value decimal (10,20),
     constraint pk_id_payment primary key (id_payment)
 );
+
+
+CREATE TABLE customer_shipping (
+id_shipping SERIAL NOT NULL,
+tracking_code VARCHAR(50) NOT NULL,
+shipping_date DATE NOT NULL,
+shipping_value DECIMAL(10, 2) NOT NULL,
+constraint pk_id_shipping primary key (id_shipping)
+);
