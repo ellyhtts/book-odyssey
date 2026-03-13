@@ -1,8 +1,8 @@
 create database book_odyssey;
 
-create table books (
+create table book (
 	id int not null, 
-	name_books varchar(100) not null,
+	name_book varchar(100) not null,
 	name_authors varchar(80) not null,
 	constraint pk_id_book primary key (id)
 );
@@ -10,8 +10,8 @@ create table books (
 
 create table publisher(
 	id int not null,
-	name_publishers varchar(100) not null,
-	name_writers varchar (80) not null,
+	name_publisher varchar(100) not null,
+	name_writer varchar (80) not null,
 	number_works int not null,
 	constraint pk_id_publisher primary key (id)
 );
@@ -19,7 +19,7 @@ create table publisher(
 
 create table categorie (
 	id int not null,
-	gender varchar(100) not null,
+	genre varchar(100) not null,
 	language varchar(50) not null,
 	constraint pk_id_category primary key (id)
 );
@@ -28,14 +28,14 @@ create table categorie (
 create table book_condition (
 	id int not null,
 	condition_description varchar(50) not null,
-	price_depreciation decimal(5,2) not null,
+	price_depreciation decimal(10,2) not null,
 	constraint pk_id_condition primary key (id)
 );
 
 
 create table customer (
     id int not null,
-    name_customers varchar(100) not null, 
+    name_customer varchar(100) not null, 
     cpf char(11) not null,
     Email varchar(100) not null,
     telefone varchar(15) not null,
@@ -44,14 +44,14 @@ create table customer (
 );
 
 
-create table orders (
-    id_orders int not null,
-    id_customers int not null,
-    quantity_items int not null,
+create table book_order (
+    id_order int not null,
+    id_customer int not null,
+    quantity_item int not null,
     date_orders date default current_date,
     current_status varchar(100) not null,
     total_value decimal(10,2) not null,
-    constraint pk_id_orders primary key (id_orders)
+    constraint pk_id_orders primary key (id)
 );
 
 
@@ -66,10 +66,10 @@ create table payment(
 
 
 create table customer_shipping (
-	id_shipping serial not null,
+	id_shipping int not null,
 	tracking_code varchar (50) not null,
 	shipping_date date not null,
-	shipping_value decimal(10, 2) not null,
+	shipping_value decimal(10,2) not null,
 	constraint pk_id_shipping primary key (id_shipping)
 );
 
@@ -81,11 +81,11 @@ create table supplier_coupon (
 	constraint pk_id_supplier_coupon primary key (id)
 );
 
-create table livraria_supplier_shipping (
+create table supplier_shipping (
 	id int not null,
 	tracking_code varchar(50) not null,
 	shipping_date date not null,
-	shipping_value numeric(10, 2) NOT NULL,
+	shipping_value numeric(10,2) NOT NULL,
 	constraint supplier_shipping_tracking_code_key UNIQUE (tracking_code),
 	constraint supplier_shipping_pkey primary key (id)
 );
@@ -93,7 +93,7 @@ create table livraria_supplier_shipping (
 create table supplier (
 	id int not null,
 	name_supplier varchar(100) not null,
-	cpf bpchar(11) not null,
+	cpf char(11) not null,
 	email varchar(100) not null,
 	phone varchar(15) not null,
 	address varchar(200) not null,
@@ -101,12 +101,12 @@ create table supplier (
 	constraint supplier_pkey primary key (id)
 );
 
-create table  livraria_admin_users (
+create table admin_user (
 	id_admin serial not null,
 	name_admin varchar(100) not null,
 	job_title varchar(50) not null,
 	email varchar(100) not null,
 	phone varchar(15) not null,
 	constraint admin_users_email_key UNIQUE (email),
-	constraint admin_users_pkey primary key (id_admin)
+	constraint admin_users_pkey primary key (id)
 );
