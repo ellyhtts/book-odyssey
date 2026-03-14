@@ -23,8 +23,8 @@ create table author(
 
 create table author_publisher(
 	id_author int not null,
-	id_pulblisher int not null,
-	constraint pk_author_publisher primary key (id)
+	id_publisher int not null,
+	constraint pk_author_publisher primary key (id_author, id_publisher)
 );
 
 
@@ -62,7 +62,7 @@ create table book_order (
     date_orders date default current_date,
     current_status varchar(100) not null,
     total_value decimal(10,2) not null,
-    constraint pk_id_orders primary key (id)
+    constraint pk_id_orders primary key (id_order)
 );
 
 
