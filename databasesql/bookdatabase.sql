@@ -21,6 +21,13 @@ create table author(
 );
 
 
+create table author_publisher(
+	id_author int not null,
+	id_pulblisher int not null,
+	constraint pk_author_publisher primary key (id)
+);
+
+
 create table categorie (
 	id int not null,
 	genre varchar(100) not null,
@@ -29,7 +36,6 @@ create table categorie (
 );
 
 
-create table autho
 create table book_condition (
 	id int not null,
 	condition_description varchar(50) not null,
