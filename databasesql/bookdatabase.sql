@@ -14,6 +14,13 @@ create table publisher(
 );
 
 
+create table author(
+	id int not null,
+	name varchar(100) not null,
+	constraint pk_id_author primary key (id)
+);
+
+
 create table categorie (
 	id int not null,
 	genre varchar(100) not null,
