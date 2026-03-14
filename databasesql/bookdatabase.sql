@@ -3,17 +3,28 @@ create database book_odyssey;
 create table book (
 	id int not null, 
 	name_book varchar(100) not null,
-	name_authors varchar(80) not null,
 	constraint pk_id_book primary key (id)
 );
 
 
 create table publisher(
 	id int not null,
-	name_publisher varchar(100) not null,
-	name_writer varchar (80) not null,
-	number_works int not null,
+	name varchar(100) not null,
 	constraint pk_id_publisher primary key (id)
+);
+
+
+create table author(
+	id int not null,
+	name varchar(100) not null,
+	constraint pk_id_author primary key (id)
+);
+
+
+create table author_publisher(
+	id_author int not null,
+	id_publisher int not null,
+	constraint pk_author_publisher primary key (id_author, id_publisher)
 );
 
 
@@ -51,7 +62,7 @@ create table book_order (
     date_orders date default current_date,
     current_status varchar(100) not null,
     total_value decimal(10,2) not null,
-    constraint pk_id_orders primary key (id)
+    constraint pk_id_orders primary key (id_order)
 );
 
 
