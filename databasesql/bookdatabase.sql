@@ -3,16 +3,13 @@ create database book_odyssey;
 create table book (
 	id int not null, 
 	name_book varchar(100) not null,
-	name_authors varchar(80) not null,
 	constraint pk_id_book primary key (id)
 );
 
 
 create table publisher(
 	id int not null,
-	name_publisher varchar(100) not null,
-	name_writer varchar (80) not null,
-	number_works int not null,
+	name varchar(100) not null,
 	constraint pk_id_publisher primary key (id)
 );
 
@@ -25,6 +22,7 @@ create table categorie (
 );
 
 
+create table autho
 create table book_condition (
 	id int not null,
 	condition_description varchar(50) not null,
