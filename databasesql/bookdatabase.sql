@@ -61,13 +61,16 @@ create table author_publisher(
 	id_author int not null,
 	id_publisher int not null,
 	constraint pk_author_publisher primary key (id_author, id_publisher),
-	constraint fk_ap_author foreign key (id_author) references author(id_author),
-    constraint fk_ap_publisher foreign key (id_publisher) references publisher(id_publisher)
+	constraint fk_ap_author foreign key (id_author) references author(id),
+    constraint fk_ap_publisher foreign key (id_publisher) references publisher(id)
 );
 
 create table book (
 	id int not null, 
 	name_book varchar(100) not null,
+	id_category int not null,
+    id_publisher int not null, 
+    id_condition int not null,
 	constraint pk_id_book primary key (id),
 	constraint fk_book_category foreign key (id_category) references categorie(id),
     constraint fk_book_publisher foreign key (id_publisher) references publisher(id),
@@ -98,6 +101,7 @@ create table payment(
 
 create table customer_shipping (
 	id_shipping int not null,
+	id_orders int not null,
 	tracking_code varchar (50) not null,
 	shipping_date date not null,
 	shipping_value decimal(10,2) not null,
@@ -106,7 +110,7 @@ create table customer_shipping (
 );
 
 create table supplier_coupon (
-	id int not null,
+	id_supplier int not null,
 	donated_books_quantity int not null,
 	redemption_points int not null,
 	constraint pk_id_supplier_coupon primary key (id_supplier),
