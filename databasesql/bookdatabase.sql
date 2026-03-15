@@ -60,7 +60,7 @@ create table admin_user (
 create table author_publisher(
 	id_author int not null,
 	id_publisher int not null,
-	constraint pk_author_publisher primary key (id_author, id_publisher)
+	constraint pk_author_publisher primary key (id_author, id_publisher),
 	constraint fk_ap_author foreign key (id_author) references author(id_author),
     constraint fk_ap_publisher foreign key (id_publisher) references publisher(id_publisher)
 );
@@ -68,10 +68,10 @@ create table author_publisher(
 create table book (
 	id int not null, 
 	name_book varchar(100) not null,
-	constraint pk_id_book primary key (id_book)
-	constraint fk_book_category foreign key (id_category) references categorie(id_category),
-    constraint fk_book_publisher foreign key (id_publisher) references publisher(id_publisher),
-    constraint fk_book_condition foreign key (id_condition) references book_condition(id_condition)
+	constraint pk_id_book primary key (id),
+	constraint fk_book_category foreign key (id_category) references categorie(id),
+    constraint fk_book_publisher foreign key (id_publisher) references publisher(id),
+    constraint fk_book_condition foreign key (id_condition) references book_condition(id)
 );
 
 create table book_order (
@@ -81,8 +81,8 @@ create table book_order (
     date_orders date default current_date,
     current_status varchar(100) not null,
     total_value decimal(10,2) not null,
-    constraint pk_id_orders primary key (id_order)
-	constraint fk_order_customer foreign key (id_customer) references customer(id_customer)
+    constraint pk_id_orders primary key (id_order),
+	constraint fk_order_customer foreign key (id_customer) references customer(id)
 );
 
 create table payment(
@@ -91,7 +91,7 @@ create table payment(
     payment_method varchar (50) not null,
     date_payment date not null,
     total_value decimal (10,2),
-    constraint pk_id_payment primary key (id_payment)
+    constraint pk_id_payment primary key (id_payment),
 	constraint fk_payment_order foreign key (id_orders) references book_order(id_order)
 );
 
@@ -101,16 +101,16 @@ create table customer_shipping (
 	tracking_code varchar (50) not null,
 	shipping_date date not null,
 	shipping_value decimal(10,2) not null,
-	constraint pk_id_shipping primary key (id_shipping)
+	constraint pk_id_shipping primary key (id_shipping),
+	constraint fk_shipping_order foreign key (id_orders) references book_order(id_order)
 );
-
 
 create table supplier_coupon (
 	id int not null,
 	donated_books_quantity int not null,
 	redemption_points int not null,
 	constraint pk_id_supplier_coupon primary key (id_supplier),
-	constraint fk_coupon_supplier foreign key (id_supplier) references supplier(id_supplier)
+	constraint fk_coupon_supplier foreign key (id_supplier) references supplier(id)
 );
 
 create table supplier_shipping (
@@ -119,8 +119,6 @@ create table supplier_shipping (
 	tracking_code varchar(50) not null,
 	shipping_date date not null,
 	shipping_value numeric(10,2) NOT NULL,
-	constraint supplier_shipping_tracking_code_key UNIQUE (tracking_code),
 	constraint supplier_shipping_pkey primary key (id),
-	constraint fk_shipping_supplier foreign key (id_supplier) references supplie (id_supplier)
+    constraint fk_shipping_supplier foreign key (id_supplier) references supplier(id)
 );
-
