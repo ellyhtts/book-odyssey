@@ -109,15 +109,18 @@ create table supplier_coupon (
 	id int not null,
 	donated_books_quantity int not null,
 	redemption_points int not null,
-	constraint pk_id_supplier_coupon primary key (id)
+	constraint pk_id_supplier_coupon primary key (id_supplier),
+	constraint fk_coupon_supplier foreign key (id_supplier) references supplier(id_supplier)
 );
 
 create table supplier_shipping (
 	id int not null,
+	id_supplier int not null,
 	tracking_code varchar(50) not null,
 	shipping_date date not null,
 	shipping_value numeric(10,2) NOT NULL,
 	constraint supplier_shipping_tracking_code_key UNIQUE (tracking_code),
-	constraint supplier_shipping_pkey primary key (id)
+	constraint supplier_shipping_pkey primary key (id),
+	constraint fk_shipping_supplier foreign key (id_supplier) references supplie (id_supplier)
 );
 
