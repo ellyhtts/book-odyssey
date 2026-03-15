@@ -1,4 +1,20 @@
-create database book_odyssey;
+drop table if exists payment;
+drop table if exists customer_shipping;
+drop table if exists supplier_shipping;
+drop table if exists supplier_coupon;
+drop table if exists book_order;
+drop table if exists author_publisher;
+drop table if exists book;
+
+drop table if exists admin_user;
+drop table if exists supplier;
+drop table if exists customer;
+drop table if exists author;
+drop table if exists publisher;
+drop table if exists book_condition;
+drop table if exists category;
+
+
 
 create table categorie (
 	id int not null,
