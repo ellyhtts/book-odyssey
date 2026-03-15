@@ -54,7 +54,7 @@ create table admin_user (
 	email varchar(100) not null,
 	phone varchar(15) not null,
 	constraint admin_users_email_key UNIQUE (email),
-	constraint admin_users_pkey primary key (id)
+	constraint admin_users_pkey primary key (id_admin)
 );
 
 create table author_publisher(
@@ -126,3 +126,4 @@ create table supplier_shipping (
 	constraint supplier_shipping_pkey primary key (id),
     constraint fk_shipping_supplier foreign key (id_supplier) references supplier(id)
 );
+
