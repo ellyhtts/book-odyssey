@@ -1,40 +1,11 @@
 create database book_odyssey;
 
-create table book (
-	id int not null, 
-	name_book varchar(100) not null,
-	constraint pk_id_book primary key (id)
-);
-
-
-create table publisher(
-	id int not null,
-	name varchar(100) not null,
-	constraint pk_id_publisher primary key (id)
-);
-
-
-create table author(
-	id int not null,
-	name varchar(100) not null,
-	constraint pk_id_author primary key (id)
-);
-
-
-create table author_publisher(
-	id_author int not null,
-	id_publisher int not null,
-	constraint pk_author_publisher primary key (id_author, id_publisher)
-);
-
-
 create table categorie (
 	id int not null,
 	genre varchar(100) not null,
 	language varchar(50) not null,
 	constraint pk_id_category primary key (id)
 );
-
 
 create table book_condition (
 	id int not null,
@@ -43,6 +14,17 @@ create table book_condition (
 	constraint pk_id_condition primary key (id)
 );
 
+create table publisher(
+	id int not null,
+	name varchar(100) not null,
+	constraint pk_id_publisher primary key (id)
+);
+
+create table author(
+	id int not null,
+	name varchar(100) not null,
+	constraint pk_id_author primary key (id)
+);
 
 create table customer (
     id int not null,
@@ -54,6 +36,43 @@ create table customer (
     constraint pk_id_customer primary key (id)
 );
 
+create table supplier (
+	id int not null,
+	name_supplier varchar(100) not null,
+	cpf char(11) not null,
+	email varchar(100) not null,
+	phone varchar(15) not null,
+	address varchar(200) not null,
+	constraint supplier_cpf_key UNIQUE (cpf),
+	constraint supplier_pkey primary key (id)
+	);
+
+create table admin_user (
+	id_admin serial not null,
+	name_admin varchar(100) not null,
+	job_title varchar(50) not null,
+	email varchar(100) not null,
+	phone varchar(15) not null,
+	constraint admin_users_email_key UNIQUE (email),
+	constraint admin_users_pkey primary key (id)
+);
+
+create table author_publisher(
+	id_author int not null,
+	id_publisher int not null,
+	constraint pk_author_publisher primary key (id_author, id_publisher)
+	constraint fk_ap_author foreign key (id_author) references author(id_author),
+    constraint fk_ap_publisher foreign key (id_publisher) references publisher(id_publisher)
+);
+
+create table book (
+	id int not null, 
+	name_book varchar(100) not null,
+	constraint pk_id_book primary key (id_book)
+	constraint fk_book_category foreign key (id_category) references categorie(id_category),
+    constraint fk_book_publisher foreign key (id_publisher) references publisher(id_publisher),
+    constraint fk_book_condition foreign key (id_condition) references book_condition(id_condition)
+);
 
 create table book_order (
     id_order int not null,
@@ -63,8 +82,8 @@ create table book_order (
     current_status varchar(100) not null,
     total_value decimal(10,2) not null,
     constraint pk_id_orders primary key (id_order)
+	constraint fk_order_customer foreign key (id_customer) references customer(id_customer)
 );
-
 
 create table payment(
     id_payment int not null,
@@ -73,6 +92,7 @@ create table payment(
     date_payment date not null,
     total_value decimal (10,2),
     constraint pk_id_payment primary key (id_payment)
+	constraint fk_payment_order foreign key (id_orders) references book_order(id_order)
 );
 
 
@@ -101,23 +121,3 @@ create table supplier_shipping (
 	constraint supplier_shipping_pkey primary key (id)
 );
 
-create table supplier (
-	id int not null,
-	name_supplier varchar(100) not null,
-	cpf char(11) not null,
-	email varchar(100) not null,
-	phone varchar(15) not null,
-	address varchar(200) not null,
-	constraint supplier_cpf_key UNIQUE (cpf),
-	constraint supplier_pkey primary key (id)
-);
-
-create table admin_user (
-	id_admin serial not null,
-	name_admin varchar(100) not null,
-	job_title varchar(50) not null,
-	email varchar(100) not null,
-	phone varchar(15) not null,
-	constraint admin_users_email_key UNIQUE (email),
-	constraint admin_users_pkey primary key (id)
-);
