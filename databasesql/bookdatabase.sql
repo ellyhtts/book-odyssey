@@ -1,18 +1,18 @@
-drop table if exists payment;
-drop table if exists customer_shipping;
-drop table if exists supplier_shipping;
-drop table if exists supplier_coupon;
-drop table if exists book_order;
-drop table if exists author_publisher;
-drop table if exists book;
+drop table if exists payment cascade;
+drop table if exists customer_shipping cascade;
+drop table if exists supplier_shipping cascade;
+drop table if exists supplier_coupon cascade;
+drop table if exists book_order cascade;
+drop table if exists author_publisher cascade;
+drop table if exists book cascade;
 
-drop table if exists admin_user;
-drop table if exists supplier;
-drop table if exists customer;
-drop table if exists author;
-drop table if exists publisher;
-drop table if exists book_condition;
-drop table if exists category;
+drop table if exists admin_user cascade;
+drop table if exists supplier cascade;
+drop table if exists customer cascade;
+drop table if exists author cascade;
+drop table if exists publisher cascade;
+drop table if exists book_condition cascade;
+drop table if exists categorie cascade;
 
 
 
@@ -20,7 +20,7 @@ create table categorie (
 	id int not null,
 	genre varchar(100) not null,
 	language varchar(50) not null,
-	constraint pk_id_category primary key (id)
+	constraint pk_id_categorie primary key (id)
 );
 
 create table book_condition (
@@ -64,7 +64,7 @@ create table supplier (
 	);
 
 create table admin_user (
-	id_admin serial not null,
+	id_admin int not null,
 	name_admin varchar(100) not null,
 	job_title varchar(50) not null,
 	email varchar(100) not null,
@@ -88,7 +88,7 @@ create table book (
     id_publisher int not null, 
     id_condition int not null,
 	constraint pk_id_book primary key (id),
-	constraint fk_book_category foreign key (id_category) references categorie(id),
+	constraint fk_book_categorie foreign key (id_categorie) references categorie(id),
     constraint fk_book_publisher foreign key (id_publisher) references publisher(id),
     constraint fk_book_condition foreign key (id_condition) references book_condition(id)
 );
@@ -142,4 +142,90 @@ create table supplier_shipping (
 	constraint supplier_shipping_pkey primary key (id),
     constraint fk_shipping_supplier foreign key (id_supplier) references supplier(id)
 );
+
+INSERT INTO categorie (id, genre, language) VALUES
+(1, 'Romance',           'Português'), 
+(2, 'Ficção Científica', 'Português'),
+(3, 'Fantasia',          'Inglês'), 
+(4, 'Biografia',         'Português'), 
+(5, 'Terror',            'Inglês');
+
+INSERT INTO book_condition (id, condition_description, price_depreciation) VALUES
+(1, 'Novo',            0.00), 
+(2, 'Seminovo',       15.00), 
+(3, 'Marcas de Tempo', 30.00);
+
+INSERT INTO publisher (id, name) VALUES
+(1, 'Intrínseca'), 
+(2, 'Sextante'), 
+(3, 'DarkSide Books'), 
+(4, 'Companhia das Letras'), 
+(5, 'Rocco');
+
+INSERT INTO author (id, name) VALUES
+(1, 'Machado de Assis'), 
+(2, 'J.K. Rowling'), 
+(3, 'George Orwell'), 
+(4, 'Stephen King'), 
+(5, 'Clarice Lispector');
+
+INSERT INTO admin_user (id_admin, name_admin, job_title, email, phone) VALUES
+(1, 'Anna Mayná',     'Administradora',         'anna@odisseia.com',    '75988887777'),
+(2, 'Diná Borges',    'Operadora de Logística', 'dina@odisseia.com',    '75988887779'),
+(3, 'Lismara Santos', 'Atendimento',            'lismara@odisseia.com', '75988887780');
+
+INSERT INTO supplier (id, name_supplier, cpf, email, phone, address) VALUES
+(1, 'Fornecedor Alpha', '10000000001', 'alpha@fornece.com',  '11999999991', 'Av. Paulista, 100'),
+(2, 'Fornecedor Beta',  '20000000002', 'beta@fornece.com',   '11999999992', 'Rua Augusta, 200'),
+(3, 'Sebo Esperança',   '30000000003', 'esperanca@sebo.com', '11999999993', 'Praça da Sé, 10');
+
+INSERT INTO author_publisher (id_author, id_publisher) VALUES
+(1, 4), (2, 5), (3, 4), (4, 2), (5, 5);
+
+
+INSERT INTO customer (id, name_customer, cpf, Email, telefone, endereco)
+SELECT 
+    gs,
+    'Cliente ' || gs,
+    LPAD(gs::text, 11, '1'), 
+    'cliente' || gs || '@email.com',
+    '759000000' || LPAD(gs::text, 2, '0'),
+    'Rua ' || gs
+FROM generate_series(1, 30) AS gs;
+
+INSERT INTO book (id, name_book, id_category, id_publisher, id_condition)
+SELECT 
+    gs,
+    'Livro ' || gs,
+    ((gs - 1) % 5) + 1,
+    ((gs - 1) % 5) + 1,
+    ((gs - 1) % 3) + 1
+FROM generate_series(1, 30) AS gs;
+
+INSERT INTO book_order (id_order, id_customer, quantity_item, date_orders, current_status, total_value)
+SELECT 
+    gs,
+    gs,
+    (gs % 4) + 1,
+    CURRENT_DATE - (gs || ' days')::interval,
+    CASE 
+        WHEN gs % 3 = 0 THEN 'Pendente' 
+        WHEN gs % 2 = 0 THEN 'Pago' 
+        ELSE 'Enviado' 
+    END,
+    ((gs % 4) + 1) * 25.00
+FROM generate_series(1, 30) AS gs;
+
+INSERT INTO payment (id_payment, id_orders, payment_method, date_payment, total_value)
+SELECT 
+    gs,
+    gs,
+    CASE 
+        WHEN gs % 3 = 0 THEN 'Boleto' 
+        WHEN gs % 2 = 0 THEN 'Cartão' 
+        ELSE 'Pix' 
+    END,
+    CURRENT_DATE - (gs || ' days')::interval,
+    ((gs % 4) + 1) * 25.00
+FROM generate_series(1, 30) AS gs;
 
