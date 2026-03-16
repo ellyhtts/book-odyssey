@@ -5,6 +5,7 @@ drop table if exists supplier_coupon cascade;
 drop table if exists book_order cascade;
 drop table if exists author_publisher cascade;
 drop table if exists book cascade;
+drop table if exists order_item cascade;
 
 drop table if exists admin_user cascade;
 drop table if exists supplier cascade;
@@ -85,10 +86,22 @@ create table book (
 	id_categorie int not null,
     id_publisher int not null, 
     id_condition int not null,
+	id_supplier int not null,
+	id_admin int not null, 
 	constraint pk_id_book primary key (id),
 	constraint fk_book_categorie foreign key (id_categorie) references categorie(id),
     constraint fk_book_publisher foreign key (id_publisher) references publisher(id),
-    constraint fk_book_condition foreign key (id_condition) references book_condition(id)
+    constraint fk_book_condition foreign key (id_condition) references book_condition(id),
+	constraint fk_book_supplier foreign key (id_supplier) references supplier(id),
+    constraint fk_book_admin foreign key (id_admin) references admin_user(id)
+);
+
+create table order_item (
+    id_order int not null,
+    id_book int not null,
+    constraint pk_order_item primary key (id_order, id_book),
+    constraint fk_item_order foreign key (id_order) references book_order(id),
+    constraint fk_item_book foreign key (id_book) references book(id)
 );
 
 create table book_order (
@@ -216,22 +229,28 @@ INSERT INTO author_publisher (id_author, id_publisher) VALUES
 (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
 (5, 1), (5, 2), (5, 3), (5, 4), (5, 5);
 
-INSERT INTO book (id, name_book, id_categorie, id_publisher, id_condition) VALUES
-(1, 'Dom Casmurro Edição Especial', 1, 1, 1), (2, 'Harry Potter e a Pedra Filosofal', 3, 5, 2),
-(3, '1984 - Nova Tradução', 2, 4, 1), (4, 'O Iluminado', 5, 2, 3),
-(5, 'A Hora da Estrela', 1, 3, 1), (6, 'Memórias Póstumas - Capa Dura', 1, 2, 1),
-(7, 'Câmara Secreta Ilustrado', 3, 1, 2), (8, 'A Revolução dos Bichos', 2, 5, 1),
-(9, 'It: A Coisa', 5, 4, 3), (10, 'Laços de Família', 1, 3, 2),
-(11, 'Quincas Borba', 1, 5, 1), (12, 'Prisioneiro de Azkaban', 3, 2, 3),
-(13, 'O Conto da Aia (Referência)', 2, 1, 1), (14, 'Cemitério Maldito', 5, 3, 2),
-(15, 'A Paixão Segundo G.H.', 1, 4, 1), (16, 'Helena', 1, 1, 3),
-(17, 'Cálice de Fogo', 3, 4, 1), (18, 'Fahrenheit 451 (Estudo)', 2, 2, 2),
-(19, 'A Dança da Morte', 5, 5, 1), (20, 'Felicidade Clandestina', 1, 3, 2),
-(21, 'Esaú e Jacó', 1, 2, 1), (22, 'Ordem da Fênix', 3, 5, 3),
-(23, 'Admirável Mundo Novo', 2, 1, 1), (24, 'Misery', 5, 4, 2),
-(25, 'Água Viva', 1, 2, 1), (26, 'Memorial de Aires', 1, 3, 3),
-(27, 'Enigma do Príncipe', 3, 1, 1), (28, 'O Homem do Castelo Alto', 2, 5, 2),
-(29, 'O Iluminado (Inglês)', 5, 1, 1), (30, 'Perto do Coração Selvagem', 1, 4, 2);
+INSERT INTO book (id, name_book, id_categorie, id_publisher, id_condition, id_supplier, id_admin) VALUES
+(1, 'Dom Casmurro Edição Especial', 1, 1, 1, 1, 1), (2, 'Harry Potter e a Pedra Filosofal', 3, 5, 2, 2, 2),
+(3, '1984 - Nova Tradução', 2, 4, 1, 3, 3), (4, 'O Iluminado', 5, 2, 3, 1, 1),
+(5, 'A Hora da Estrela', 1, 3, 1, 2, 2), (6, 'Memórias Póstumas - Capa Dura', 1, 2, 1, 3, 3),
+(7, 'Câmara Secreta Ilustrado', 3, 1, 2, 1, 1), (8, 'A Revolução dos Bichos', 2, 5, 1, 2, 2),
+(9, 'It: A Coisa', 5, 4, 3, 3, 3), (10, 'Laços de Família', 1, 3, 2, 1, 1),
+(11, 'Quincas Borba', 1, 5, 1, 2, 2), (12, 'Prisioneiro de Azkaban', 3, 2, 3, 3, 3),
+(13, 'O Conto da Aia (Referência)', 2, 1, 1, 1, 1), (14, 'Cemitério Maldito', 5, 3, 2, 2, 2),
+(15, 'A Paixão Segundo G.H.', 1, 4, 1, 3, 3), (16, 'Helena', 1, 1, 3, 1, 1),
+(17, 'Cálice de Fogo', 3, 4, 1, 2, 2), (18, 'Fahrenheit 451 (Estudo)', 2, 2, 2, 3, 3),
+(19, 'A Dança da Morte', 5, 5, 1, 1, 1), (20, 'Felicidade Clandestina', 1, 3, 2, 2, 2),
+(21, 'Esaú e Jacó', 1, 2, 1, 3, 3), (22, 'Ordem da Fênix', 3, 5, 3, 1, 1),
+(23, 'Admirável Mundo Novo', 2, 1, 1, 2, 2), (24, 'Misery', 5, 4, 2, 3, 3),
+(25, 'Água Viva', 1, 2, 1, 1, 1), (26, 'Memorial de Aires', 1, 3, 3, 2, 2),
+(27, 'Enigma do Príncipe', 3, 1, 1, 3, 3), (28, 'O Homem do Castelo Alto', 2, 5, 2, 1, 1),
+(29, 'O Iluminado (Inglês)', 5, 1, 1, 2, 2), (30, 'Perto do Coração Selvagem', 1, 4, 2, 3, 3);
+
+INSERT INTO order_item (id_order, id_book) VALUES
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10),
+(11, 11), (12, 12), (13, 13), (14, 14), (15, 15), (16, 16), (17, 17), (18, 18), (19, 19), (20, 20),
+(21, 21), (22, 22), (23, 23), (24, 24), (25, 25), (26, 26), (27, 27), (28, 28), (29, 29), (30, 30);
+
 
 INSERT INTO book_order (id, id_customer, quantity_item, date_orders, current_status, total_value) VALUES
 (1, 1, 2, '2025-10-01', 'Finalizado', 50.00), (2, 2, 1, '2025-10-02', 'Em andamento', 35.50),
