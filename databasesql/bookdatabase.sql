@@ -14,8 +14,6 @@ drop table if exists publisher cascade;
 drop table if exists book_condition cascade;
 drop table if exists categorie cascade;
 
-
-
 create table categorie (
 	id int not null,
 	genre varchar(100) not null,
@@ -64,13 +62,13 @@ create table supplier (
 	);
 
 create table admin_user (
-	id_admin int not null,
+	id int not null,
 	name_admin varchar(100) not null,
 	job_title varchar(50) not null,
 	email varchar(100) not null,
 	phone varchar(15) not null,
 	constraint admin_users_email_key UNIQUE (email),
-	constraint admin_users_pkey primary key (id_admin)
+	constraint admin_users_pkey primary key (id)
 );
 
 create table author_publisher(
@@ -84,7 +82,7 @@ create table author_publisher(
 create table book (
 	id int not null, 
 	name_book varchar(100) not null,
-	id_category int not null,
+	id_categorie int not null,
     id_publisher int not null, 
     id_condition int not null,
 	constraint pk_id_book primary key (id),
@@ -94,13 +92,13 @@ create table book (
 );
 
 create table book_order (
-    id_order int not null,
+    id int not null,
     id_customer int not null,
     quantity_item int not null,
     date_orders date default current_date,
     current_status varchar(100) not null,
     total_value decimal(10,2) not null,
-    constraint pk_id_orders primary key (id_order),
+    constraint pk_id_orders primary key (id),
 	constraint fk_order_customer foreign key (id_customer) references customer(id)
 );
 
@@ -116,20 +114,20 @@ create table payment(
 
 
 create table customer_shipping (
-	id_shipping int not null,
+	id int not null,
 	id_orders int not null,
 	tracking_code varchar (50) not null,
 	shipping_date date not null,
 	shipping_value decimal(10,2) not null,
-	constraint pk_id_shipping primary key (id_shipping),
+	constraint pk_id_shipping primary key (id),
 	constraint fk_shipping_order foreign key (id_orders) references book_order(id_order)
 );
 
 create table supplier_coupon (
-	id_supplier int not null,
+	id int not null,
 	donated_books_quantity int not null,
 	redemption_points int not null,
-	constraint pk_id_supplier_coupon primary key (id_supplier),
+	constraint pk_id_supplier_coupon primary key (id),
 	constraint fk_coupon_supplier foreign key (id_supplier) references supplier(id)
 );
 
@@ -178,54 +176,4 @@ INSERT INTO supplier (id, name_supplier, cpf, email, phone, address) VALUES
 (1, 'Fornecedor Alpha', '10000000001', 'alpha@fornece.com',  '11999999991', 'Av. Paulista, 100'),
 (2, 'Fornecedor Beta',  '20000000002', 'beta@fornece.com',   '11999999992', 'Rua Augusta, 200'),
 (3, 'Sebo Esperança',   '30000000003', 'esperanca@sebo.com', '11999999993', 'Praça da Sé, 10');
-
-INSERT INTO author_publisher (id_author, id_publisher) VALUES
-(1, 4), (2, 5), (3, 4), (4, 2), (5, 5);
-
-
-INSERT INTO customer (id, name_customer, cpf, Email, telefone, endereco)
-SELECT 
-    gs,
-    'Cliente ' || gs,
-    LPAD(gs::text, 11, '1'), 
-    'cliente' || gs || '@email.com',
-    '759000000' || LPAD(gs::text, 2, '0'),
-    'Rua ' || gs
-FROM generate_series(1, 30) AS gs;
-
-INSERT INTO book (id, name_book, id_category, id_publisher, id_condition)
-SELECT 
-    gs,
-    'Livro ' || gs,
-    ((gs - 1) % 5) + 1,
-    ((gs - 1) % 5) + 1,
-    ((gs - 1) % 3) + 1
-FROM generate_series(1, 30) AS gs;
-
-INSERT INTO book_order (id_order, id_customer, quantity_item, date_orders, current_status, total_value)
-SELECT 
-    gs,
-    gs,
-    (gs % 4) + 1,
-    CURRENT_DATE - (gs || ' days')::interval,
-    CASE 
-        WHEN gs % 3 = 0 THEN 'Pendente' 
-        WHEN gs % 2 = 0 THEN 'Pago' 
-        ELSE 'Enviado' 
-    END,
-    ((gs % 4) + 1) * 25.00
-FROM generate_series(1, 30) AS gs;
-
-INSERT INTO payment (id_payment, id_orders, payment_method, date_payment, total_value)
-SELECT 
-    gs,
-    gs,
-    CASE 
-        WHEN gs % 3 = 0 THEN 'Boleto' 
-        WHEN gs % 2 = 0 THEN 'Cartão' 
-        ELSE 'Pix' 
-    END,
-    CURRENT_DATE - (gs || ' days')::interval,
-    ((gs % 4) + 1) * 25.00
-FROM generate_series(1, 30) AS gs;
 
