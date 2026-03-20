@@ -100,8 +100,8 @@ create table book_order (
     id int not null,
     id_customer int not null,
     quantity_item int not null,
-    date_orders date default current_date,
-    current_status varchar(100) not null,
+    order_date date default current_date,
+    status varchar(100) not null,
     total_value decimal(10,2) not null,
     constraint pk_id_orders primary key (id),
     constraint fk_order_customer foreign key (id_customer) references customer(id)
@@ -117,23 +117,23 @@ create table order_item (
 
 create table payment(
     id int not null,
-    id_orders int not null, 
+    id_order int not null, 
     payment_method varchar (50) not null,
     date_payment date not null,
     total_value decimal (10,2),
     constraint pk_id_payment primary key (id),
-    constraint fk_payment_order foreign key (id_orders) references book_order(id)
+    constraint fk_payment_order foreign key (id_order) references book_order(id)
 );
 
 
 create table customer_shipping (
     id int not null,
-    id_orders int not null,
+    id_order int not null,
     tracking_code varchar (50) not null,
     shipping_date date not null,
     shipping_value decimal(10,2) not null,
     constraint pk_id_shipping primary key (id),
-    constraint fk_shipping_order foreign key (id_orders) references book_order(id)
+    constraint fk_shipping_order foreign key (id_order) references book_order(id)
 );
 
 create table supplier_coupon (
@@ -247,7 +247,7 @@ INSERT INTO book (id, title, id_category, id_publisher, id_condition, id_supplie
 (29, 'O Iluminado (Inglês)', 5, 1, 1, 2, 2), (30, 'Perto do Coração Selvagem', 1, 4, 2, 3, 3);
 
 
-INSERT INTO book_order (id, id_customer, quantity_item, date_orders, current_status, total_value) VALUES
+INSERT INTO book_order (id, id_customer, quantity_item, order_date, status, total_value) VALUES
 (1, 1, 2, '2025-10-01', 'Finalizado', 50.00), (2, 2, 1, '2025-10-02', 'Em andamento', 35.50),
 (3, 3, 3, '2025-10-03', 'Finalizado', 120.00), (4, 4, 1, '2025-10-04', 'Cancelado', 40.00),
 (5, 5, 4, '2025-10-05', 'Finalizado', 200.00), (6, 6, 1, '2025-10-06', 'Enviado', 60.00),
@@ -269,7 +269,7 @@ INSERT INTO order_item (id_order, id_book) VALUES
 (11, 11), (12, 12), (13, 13), (14, 14), (15, 15), (16, 16), (17, 17), (18, 18), (19, 19), (20, 20),
 (21, 21), (22, 22), (23, 23), (24, 24), (25, 25), (26, 26), (27, 27), (28, 28), (29, 29), (30, 30);
 
-INSERT INTO payment (id, id_orders, payment_method, date_payment, total_value) VALUES
+INSERT INTO payment (id, id_order, payment_method, date_payment, total_value) VALUES
 (1, 1, 'PIX', '2025-10-01', 50.00), (2, 2, 'Cartão de Crédito', '2025-10-02', 35.50),
 (3, 3, 'Boleto', '2025-10-04', 120.00), (4, 4, 'PIX', '2025-10-04', 40.00),
 (5, 5, 'Cartão de Débito', '2025-10-05', 200.00), (6, 6, 'PIX', '2025-10-06', 60.00),
@@ -286,7 +286,7 @@ INSERT INTO payment (id, id_orders, payment_method, date_payment, total_value) V
 (27, 27, 'Cartão de Crédito', '2025-10-27', 145.00), (28, 28, 'Boleto', '2025-10-29', 75.00),
 (29, 29, 'PIX', '2025-10-29', 35.00), (30, 30, 'Cartão de Débito', '2025-10-30', 190.00);
 
-INSERT INTO customer_shipping (id, id_orders, tracking_code, shipping_date, shipping_value) VALUES
+INSERT INTO customer_shipping (id, id_order, tracking_code, shipping_date, shipping_value) VALUES
 (1, 1, 'BR000000001BR', '2025-10-02', 15.00), (2, 2, 'BR000000002BR', '2025-10-03', 12.50),
 (3, 3, 'BR000000003BR', '2025-10-05', 20.00), (4, 4, 'BR000000004BR', '2025-10-05', 10.00),
 (5, 5, 'BR000000005BR', '2025-10-06', 25.00), (6, 6, 'BR000000006BR', '2025-10-07', 18.00),
@@ -338,7 +338,7 @@ INNER JOIN publisher p ON b.id_publisher = p.id;
 
 SELECT bo.id AS "ID do Pedido", cs.tracking_code AS "Código de Rastreio", cs.shipping_date AS "Data de Envio"
 FROM book_order bo
-LEFT JOIN customer_shipping cs ON bo.id = cs.id_orders;
+LEFT JOIN customer_shipping cs ON bo.id = cs.id_order;
 
 SELECT b.title AS "Título do Livro", c.genre AS "Categoria Literária"
 FROM book b
@@ -346,9 +346,9 @@ INNER JOIN category c ON b.id_category = c.id;
 
 SELECT bo.total_value AS "Valor do Pedido", p.payment_method AS "Forma de Pagamento", p.date_payment AS "Data do Pagamento"
 FROM book_order bo
-INNER JOIN payment p ON bo.id = p.id_orders;
+INNER JOIN payment p ON bo.id = p.id_order;
 
-SELECT c.name AS "Cliente", bo.id AS "ID do Pedido", bo.date_orders AS "Data da Compra"
+SELECT c.name AS "Cliente", bo.id AS "ID do Pedido", bo.order_date AS "Data da Compra"
 FROM customer c
 LEFT JOIN book_order bo ON c.id = bo.id_customer;
 
@@ -372,4 +372,4 @@ SELECT b.title AS "Título do Livro", cs.shipping_value AS "Custo do Frete"
 FROM book b
 LEFT JOIN order_item oi ON b.id = oi.id_book
 LEFT JOIN book_order bo ON oi.id_order = bo.id
-LEFT JOIN customer_shipping cs ON bo.id = cs.id_orders;
+LEFT JOIN customer_shipping cs ON bo.id = cs.id_order;
