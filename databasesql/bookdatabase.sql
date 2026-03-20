@@ -82,7 +82,7 @@ create table author_publisher(
 
 create table book (
     id int not null, 
-    name_book varchar(100) not null,
+    title varchar(100) not null,
     id_category int not null,
     id_publisher int not null, 
     id_condition int not null,
@@ -229,7 +229,7 @@ INSERT INTO author_publisher (id_author, id_publisher) VALUES
 (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
 (5, 1), (5, 2), (5, 3), (5, 4), (5, 5);
 
-INSERT INTO book (id, name_book, id_category, id_publisher, id_condition, id_supplier, id_admin) VALUES
+INSERT INTO book (id, title, id_category, id_publisher, id_condition, id_supplier, id_admin) VALUES
 (1, 'Dom Casmurro Edição Especial', 1, 1, 1, 1, 1), (2, 'Harry Potter e a Pedra Filosofal', 3, 5, 2, 2, 2),
 (3, '1984 - Nova Tradução', 2, 4, 1, 3, 3), (4, 'O Iluminado', 5, 2, 3, 1, 1),
 (5, 'A Hora da Estrela', 1, 3, 1, 2, 2), (6, 'Memórias Póstumas - Capa Dura', 1, 2, 1, 3, 3),
@@ -324,7 +324,7 @@ INSERT INTO supplier_shipping (id, id_supplier, tracking_code, shipping_date, sh
 (29, 2, 'SUP000000029BR', '2025-09-29', 65.00), (30, 3, 'SUP000000030BR', '2025-09-30', 49.00);
 
 
-SELECT b.name_book AS "Título do Livro", bc.condition_description AS "Estado de Conservação"
+SELECT b.title AS "Título do Livro", bc.condition_description AS "Estado de Conservação"
 FROM book b
 LEFT JOIN book_condition bc ON b.id_condition = bc.id;
 
@@ -332,7 +332,7 @@ SELECT bo.id AS "ID do Pedido", c.name AS "Nome do Cliente"
 FROM book_order bo
 INNER JOIN customer c ON bo.id_customer = c.id;
 
-SELECT b.name_book AS "Título do Livro", p.name AS "Editora"
+SELECT b.title AS "Título do Livro", p.name AS "Editora"
 FROM book b
 INNER JOIN publisher p ON b.id_publisher = p.id;
 
@@ -340,7 +340,7 @@ SELECT bo.id AS "ID do Pedido", cs.tracking_code AS "Código de Rastreio", cs.sh
 FROM book_order bo
 LEFT JOIN customer_shipping cs ON bo.id = cs.id_orders;
 
-SELECT b.name_book AS "Título do Livro", c.genre AS "Categoria Literária"
+SELECT b.title AS "Título do Livro", c.genre AS "Categoria Literária"
 FROM book b
 INNER JOIN category c ON b.id_category = c.id;
 
@@ -352,7 +352,7 @@ SELECT c.name AS "Cliente", bo.id AS "ID do Pedido", bo.date_orders AS "Data da 
 FROM customer c
 LEFT JOIN book_order bo ON c.id = bo.id_customer;
 
-SELECT s.name AS "Fornecedor", b.name_book AS "Título do Livro"
+SELECT s.name AS "Fornecedor", b.title AS "Título do Livro"
 FROM supplier s
 INNER JOIN book b ON s.id = b.id_supplier;
 
@@ -360,15 +360,15 @@ SELECT s.name AS "Fornecedor", sc.donated_books_quantity AS "Livros Doados", sc.
 FROM supplier_coupon sc
 INNER JOIN supplier s ON sc.id = s.id;
 
-SELECT bc.condition_description AS "Estado de Conservação", b.name_book AS "Título do Livro"
+SELECT bc.condition_description AS "Estado de Conservação", b.title AS "Título do Livro"
 FROM book b
 RIGHT JOIN book_condition bc ON b.id_condition = bc.id;
 
-SELECT a.name AS "Administrador", b.name_book AS "Livro Cadastrado/Alterado"
+SELECT a.name AS "Administrador", b.title AS "Livro Cadastrado/Alterado"
 FROM admin_user a
 INNER JOIN book b ON a.id = b.id_admin;
 
-SELECT b.name_book AS "Título do Livro", cs.shipping_value AS "Custo do Frete"
+SELECT b.title AS "Título do Livro", cs.shipping_value AS "Custo do Frete"
 FROM book b
 LEFT JOIN order_item oi ON b.id = oi.id_book
 LEFT JOIN book_order bo ON oi.id_order = bo.id
