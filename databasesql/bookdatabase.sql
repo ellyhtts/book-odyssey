@@ -2,10 +2,10 @@ drop table if exists payment cascade;
 drop table if exists customer_shipping cascade;
 drop table if exists supplier_shipping cascade;
 drop table if exists supplier_coupon cascade;
+drop table if exists order_item cascade;
 drop table if exists book_order cascade;
 drop table if exists author_publisher cascade;
 drop table if exists book cascade;
-drop table if exists order_item cascade;
 
 drop table if exists admin_user cascade;
 drop table if exists supplier cascade;
@@ -13,87 +13,98 @@ drop table if exists customer cascade;
 drop table if exists author cascade;
 drop table if exists publisher cascade;
 drop table if exists book_condition cascade;
-drop table if exists categorie cascade;
+drop table if exists category cascade;
 
-create table categorie (
-	id int not null,
-	genre varchar(100) not null,
-	language varchar(50) not null,
-	constraint pk_id_categorie primary key (id)
+create table category (
+    id int not null,
+    genre varchar(100) not null,
+    language varchar(50) not null,
+    constraint pk_id_category primary key (id)
 );
 
 create table book_condition (
-	id int not null,
-	condition_description varchar(50) not null,
-	price_depreciation decimal(10,2) not null,
-	constraint pk_id_condition primary key (id)
+    id int not null,
+    condition_description varchar(50) not null,
+    price_depreciation decimal(10,2) not null,
+    constraint pk_id_condition primary key (id)
 );
 
 create table publisher(
-	id int not null,
-	name varchar(100) not null,
-	constraint pk_id_publisher primary key (id)
+    id int not null,
+    name varchar(100) not null,
+    constraint pk_id_publisher primary key (id)
 );
 
 create table author(
-	id int not null,
-	name varchar(100) not null,
-	constraint pk_id_author primary key (id)
+    id int not null,
+    name varchar(100) not null,
+    constraint pk_id_author primary key (id)
 );
 
 create table customer (
     id int not null,
-    name_customer varchar(100) not null, 
+    name varchar(100) not null, 
     cpf char(11) not null,
-    Email varchar(100) not null,
-    telefone varchar(15) not null,
-    endereco varchar(200) not null,
+    email varchar(100) not null,
+    phone varchar(15) not null,
+    address varchar(200) not null,
     constraint pk_id_customer primary key (id)
 );
 
 create table supplier (
-	id int not null,
-	name_supplier varchar(100) not null,
-	cpf char(11) not null,
-	email varchar(100) not null,
-	phone varchar(15) not null,
-	address varchar(200) not null,
-	constraint supplier_cpf_key UNIQUE (cpf),
-	constraint supplier_pkey primary key (id)
+    id int not null,
+    name varchar(100) not null,
+    cpf char(11) not null,
+    email varchar(100) not null,
+    phone varchar(15) not null,
+    address varchar(200) not null,
+    constraint supplier_cpf_key UNIQUE (cpf),
+    constraint supplier_pkey primary key (id)
 );
 
 create table admin_user (
-	id int not null,
-	name_admin varchar(100) not null,
-	job_title varchar(50) not null,
-	email varchar(100) not null,
-	phone varchar(15) not null,
-	constraint admin_users_email_key UNIQUE (email),
-	constraint admin_users_pkey primary key (id)
+    id int not null,
+    name varchar(100) not null,
+    job_title varchar(50) not null,
+    email varchar(100) not null,
+    phone varchar(15) not null,
+    constraint admin_users_email_key UNIQUE (email),
+    constraint admin_users_pkey primary key (id)
 );
 
 create table author_publisher(
-	id_author int not null,
-	id_publisher int not null,
-	constraint pk_author_publisher primary key (id_author, id_publisher),
-	constraint fk_ap_author foreign key (id_author) references author(id),
+    id_author int not null,
+    id_publisher int not null,
+    constraint pk_author_publisher primary key (id_author, id_publisher),
+    constraint fk_ap_author foreign key (id_author) references author(id),
     constraint fk_ap_publisher foreign key (id_publisher) references publisher(id)
 );
 
 create table book (
-	id int not null, 
-	name_book varchar(100) not null,
-	id_categorie int not null,
+    id int not null, 
+    title varchar(100) not null,
+    id_category int not null,
     id_publisher int not null, 
     id_condition int not null,
-	id_supplier int not null,
-	id_admin int not null, 
-	constraint pk_id_book primary key (id),
-	constraint fk_book_categorie foreign key (id_categorie) references categorie(id),
+    id_supplier int not null, 
+    id_admin int not null,    
+    constraint pk_id_book primary key (id),
+    constraint fk_book_category foreign key (id_category) references category(id),
     constraint fk_book_publisher foreign key (id_publisher) references publisher(id),
     constraint fk_book_condition foreign key (id_condition) references book_condition(id),
-	constraint fk_book_supplier foreign key (id_supplier) references supplier(id),
+    constraint fk_book_supplier foreign key (id_supplier) references supplier(id),
     constraint fk_book_admin foreign key (id_admin) references admin_user(id)
+);
+
+create table book_order (
+    id int not null,
+    id_customer int not null,
+    quantity_item int not null,
+    order_date date default current_date,
+    status varchar(100) not null,
+    total_value decimal(10,2) not null,
+    constraint pk_id_orders primary key (id),
+    constraint fk_order_customer foreign key (id_customer) references customer(id)
 );
 
 create table order_item (
@@ -104,57 +115,46 @@ create table order_item (
     constraint fk_item_book foreign key (id_book) references book(id)
 );
 
-create table book_order (
-    id int not null,
-    id_customer int not null,
-    quantity_item int not null,
-    date_orders date default current_date,
-    current_status varchar(100) not null,
-    total_value decimal(10,2) not null,
-    constraint pk_id_orders primary key (id),
-	constraint fk_order_customer foreign key (id_customer) references customer(id)
-);
-
 create table payment(
     id int not null,
-    id_orders int not null, 
+    id_order int not null, 
     payment_method varchar (50) not null,
     date_payment date not null,
     total_value decimal (10,2),
     constraint pk_id_payment primary key (id),
-	constraint fk_payment_order foreign key (id_orders) references book_order(id)
+    constraint fk_payment_order foreign key (id_order) references book_order(id)
 );
 
 
 create table customer_shipping (
-	id int not null,
-	id_orders int not null,
-	tracking_code varchar (50) not null,
-	shipping_date date not null,
-	shipping_value decimal(10,2) not null,
-	constraint pk_id_shipping primary key (id),
-	constraint fk_shipping_order foreign key (id_orders) references book_order(id)
+    id int not null,
+    id_order int not null,
+    tracking_code varchar (50) not null,
+    shipping_date date not null,
+    shipping_value decimal(10,2) not null,
+    constraint pk_id_shipping primary key (id),
+    constraint fk_shipping_order foreign key (id_order) references book_order(id)
 );
 
 create table supplier_coupon (
-	id int not null,
-	donated_books_quantity int not null,
-	redemption_points int not null,
-	constraint pk_id_supplier_coupon primary key (id),
-	constraint fk_coupon_supplier foreign key (id) references supplier(id)
+    id int not null,
+    donated_books_quantity int not null,
+    redemption_points int not null,
+    constraint pk_id_supplier_coupon primary key (id),
+    constraint fk_coupon_supplier foreign key (id) references supplier(id)
 );
 
 create table supplier_shipping (
-	id int not null,
-	id_supplier int not null,
-	tracking_code varchar(50) not null,
-	shipping_date date not null,
-	shipping_value numeric(10,2) NOT NULL,
-	constraint supplier_shipping_pkey primary key (id),
+    id int not null,
+    id_supplier int not null,
+    tracking_code varchar(50) not null,
+    shipping_date date not null,
+    shipping_value numeric(10,2) NOT NULL,
+    constraint supplier_shipping_pkey primary key (id),
     constraint fk_shipping_supplier foreign key (id_supplier) references supplier(id)
 );
 
-INSERT INTO categorie (id, genre, language) VALUES
+INSERT INTO category (id, genre, language) VALUES
 (1, 'Romance',           'Português'), 
 (2, 'Ficção Científica', 'Português'),
 (3, 'Fantasia',          'Inglês'), 
@@ -180,17 +180,17 @@ INSERT INTO author (id, name) VALUES
 (4, 'Stephen King'), 
 (5, 'Clarice Lispector');
 
-INSERT INTO admin_user (id, name_admin, job_title, email, phone) VALUES
+INSERT INTO admin_user (id, name, job_title, email, phone) VALUES
 (1, 'Anna Mayná',     'Administradora',         'anna@odisseia.com',    '75988887777'),
 (2, 'Diná Borges',    'Operadora de Logística', 'dina@odisseia.com',    '75988887779'),
 (3, 'Lismara Santos', 'Atendimento',            'lismara@odisseia.com', '75988887780');
 
-INSERT INTO supplier (id, name_supplier, cpf, email, phone, address) VALUES
+INSERT INTO supplier (id, name, cpf, email, phone, address) VALUES
 (1, 'Fornecedor Alpha', '10000000001', 'alpha@fornece.com',  '11999999991', 'Av. Paulista, 100'),
 (2, 'Fornecedor Beta',  '20000000002', 'beta@fornece.com',   '11999999992', 'Rua Augusta, 200'),
 (3, 'Sebo Esperança',   '30000000003', 'esperanca@sebo.com', '11999999993', 'Praça da Sé, 10');
 
-INSERT INTO customer (id, name_customer, cpf, Email, telefone, endereco) VALUES
+INSERT INTO customer (id, name, cpf, email, phone, address) VALUES
 (1, 'Carlos Mendes', '12345678901', 'carlos@mail.com', '75911112222', 'Rua Um, 10'),
 (2, 'Fernanda Lima', '12345678902', 'fernanda@mail.com', '75911112223', 'Rua Dois, 20'),
 (3, 'Julio Cesar', '12345678903', 'julio@mail.com', '75911112224', 'Rua Tres, 30'),
@@ -229,7 +229,7 @@ INSERT INTO author_publisher (id_author, id_publisher) VALUES
 (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
 (5, 1), (5, 2), (5, 3), (5, 4), (5, 5);
 
-INSERT INTO book (id, name_book, id_categorie, id_publisher, id_condition, id_supplier, id_admin) VALUES
+INSERT INTO book (id, title, id_category, id_publisher, id_condition, id_supplier, id_admin) VALUES
 (1, 'Dom Casmurro Edição Especial', 1, 1, 1, 1, 1), (2, 'Harry Potter e a Pedra Filosofal', 3, 5, 2, 2, 2),
 (3, '1984 - Nova Tradução', 2, 4, 1, 3, 3), (4, 'O Iluminado', 5, 2, 3, 1, 1),
 (5, 'A Hora da Estrela', 1, 3, 1, 2, 2), (6, 'Memórias Póstumas - Capa Dura', 1, 2, 1, 3, 3),
@@ -246,13 +246,8 @@ INSERT INTO book (id, name_book, id_categorie, id_publisher, id_condition, id_su
 (27, 'Enigma do Príncipe', 3, 1, 1, 3, 3), (28, 'O Homem do Castelo Alto', 2, 5, 2, 1, 1),
 (29, 'O Iluminado (Inglês)', 5, 1, 1, 2, 2), (30, 'Perto do Coração Selvagem', 1, 4, 2, 3, 3);
 
-INSERT INTO order_item (id_order, id_book) VALUES
-(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10),
-(11, 11), (12, 12), (13, 13), (14, 14), (15, 15), (16, 16), (17, 17), (18, 18), (19, 19), (20, 20),
-(21, 21), (22, 22), (23, 23), (24, 24), (25, 25), (26, 26), (27, 27), (28, 28), (29, 29), (30, 30);
 
-
-INSERT INTO book_order (id, id_customer, quantity_item, date_orders, current_status, total_value) VALUES
+INSERT INTO book_order (id, id_customer, quantity_item, order_date, status, total_value) VALUES
 (1, 1, 2, '2025-10-01', 'Finalizado', 50.00), (2, 2, 1, '2025-10-02', 'Em andamento', 35.50),
 (3, 3, 3, '2025-10-03', 'Finalizado', 120.00), (4, 4, 1, '2025-10-04', 'Cancelado', 40.00),
 (5, 5, 4, '2025-10-05', 'Finalizado', 200.00), (6, 6, 1, '2025-10-06', 'Enviado', 60.00),
@@ -269,7 +264,12 @@ INSERT INTO book_order (id, id_customer, quantity_item, date_orders, current_sta
 (27, 27, 3, '2025-10-27', 'Finalizado', 145.00), (28, 28, 2, '2025-10-28', 'Cancelado', 75.00),
 (29, 29, 1, '2025-10-29', 'Finalizado', 35.00), (30, 30, 4, '2025-10-30', 'Enviado', 190.00);
 
-INSERT INTO payment (id, id_orders, payment_method, date_payment, total_value) VALUES
+INSERT INTO order_item (id_order, id_book) VALUES
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10),
+(11, 11), (12, 12), (13, 13), (14, 14), (15, 15), (16, 16), (17, 17), (18, 18), (19, 19), (20, 20),
+(21, 21), (22, 22), (23, 23), (24, 24), (25, 25), (26, 26), (27, 27), (28, 28), (29, 29), (30, 30);
+
+INSERT INTO payment (id, id_order, payment_method, date_payment, total_value) VALUES
 (1, 1, 'PIX', '2025-10-01', 50.00), (2, 2, 'Cartão de Crédito', '2025-10-02', 35.50),
 (3, 3, 'Boleto', '2025-10-04', 120.00), (4, 4, 'PIX', '2025-10-04', 40.00),
 (5, 5, 'Cartão de Débito', '2025-10-05', 200.00), (6, 6, 'PIX', '2025-10-06', 60.00),
@@ -286,7 +286,7 @@ INSERT INTO payment (id, id_orders, payment_method, date_payment, total_value) V
 (27, 27, 'Cartão de Crédito', '2025-10-27', 145.00), (28, 28, 'Boleto', '2025-10-29', 75.00),
 (29, 29, 'PIX', '2025-10-29', 35.00), (30, 30, 'Cartão de Débito', '2025-10-30', 190.00);
 
-INSERT INTO customer_shipping (id, id_orders, tracking_code, shipping_date, shipping_value) VALUES
+INSERT INTO customer_shipping (id, id_order, tracking_code, shipping_date, shipping_value) VALUES
 (1, 1, 'BR000000001BR', '2025-10-02', 15.00), (2, 2, 'BR000000002BR', '2025-10-03', 12.50),
 (3, 3, 'BR000000003BR', '2025-10-05', 20.00), (4, 4, 'BR000000004BR', '2025-10-05', 10.00),
 (5, 5, 'BR000000005BR', '2025-10-06', 25.00), (6, 6, 'BR000000006BR', '2025-10-07', 18.00),
@@ -322,3 +322,54 @@ INSERT INTO supplier_shipping (id, id_supplier, tracking_code, shipping_date, sh
 (25, 1, 'SUP000000025BR', '2025-09-25', 58.00), (26, 2, 'SUP000000026BR', '2025-09-26', 47.00),
 (27, 3, 'SUP000000027BR', '2025-09-27', 37.00), (28, 1, 'SUP000000028BR', '2025-09-28', 51.00),
 (29, 2, 'SUP000000029BR', '2025-09-29', 65.00), (30, 3, 'SUP000000030BR', '2025-09-30', 49.00);
+
+
+SELECT b.title AS "Título do Livro", bc.condition_description AS "Estado de Conservação"
+FROM book b
+LEFT JOIN book_condition bc ON b.id_condition = bc.id;
+
+SELECT bo.id AS "ID do Pedido", c.name AS "Nome do Cliente"
+FROM book_order bo
+INNER JOIN customer c ON bo.id_customer = c.id;
+
+SELECT b.title AS "Título do Livro", p.name AS "Editora"
+FROM book b
+INNER JOIN publisher p ON b.id_publisher = p.id;
+
+SELECT bo.id AS "ID do Pedido", cs.tracking_code AS "Código de Rastreio", cs.shipping_date AS "Data de Envio"
+FROM book_order bo
+LEFT JOIN customer_shipping cs ON bo.id = cs.id_order;
+
+SELECT b.title AS "Título do Livro", c.genre AS "Categoria Literária"
+FROM book b
+INNER JOIN category c ON b.id_category = c.id;
+
+SELECT bo.total_value AS "Valor do Pedido", p.payment_method AS "Forma de Pagamento", p.date_payment AS "Data do Pagamento"
+FROM book_order bo
+INNER JOIN payment p ON bo.id = p.id_order;
+
+SELECT c.name AS "Cliente", bo.id AS "ID do Pedido", bo.order_date AS "Data da Compra"
+FROM customer c
+LEFT JOIN book_order bo ON c.id = bo.id_customer;
+
+SELECT s.name AS "Fornecedor", b.title AS "Título do Livro"
+FROM supplier s
+INNER JOIN book b ON s.id = b.id_supplier;
+
+SELECT s.name AS "Fornecedor", sc.donated_books_quantity AS "Livros Doados", sc.redemption_points AS "Pontos Acumulados"
+FROM supplier_coupon sc
+INNER JOIN supplier s ON sc.id = s.id;
+
+SELECT bc.condition_description AS "Estado de Conservação", b.title AS "Título do Livro"
+FROM book b
+RIGHT JOIN book_condition bc ON b.id_condition = bc.id;
+
+SELECT a.name AS "Administrador", b.title AS "Livro Cadastrado/Alterado"
+FROM admin_user a
+INNER JOIN book b ON a.id = b.id_admin;
+
+SELECT b.title AS "Título do Livro", cs.shipping_value AS "Custo do Frete"
+FROM book b
+LEFT JOIN order_item oi ON b.id = oi.id_book
+LEFT JOIN book_order bo ON oi.id_order = bo.id
+LEFT JOIN customer_shipping cs ON bo.id = cs.id_order;
