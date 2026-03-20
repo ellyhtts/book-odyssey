@@ -43,17 +43,17 @@ create table author(
 
 create table customer (
     id int not null,
-    name_customer varchar(100) not null, 
+    name varchar(100) not null, 
     cpf char(11) not null,
-    Email varchar(100) not null,
-    telefone varchar(15) not null,
-    endereco varchar(200) not null,
+    email varchar(100) not null,
+    phone varchar(15) not null,
+    address varchar(200) not null,
     constraint pk_id_customer primary key (id)
 );
 
 create table supplier (
     id int not null,
-    name_supplier varchar(100) not null,
+    name varchar(100) not null,
     cpf char(11) not null,
     email varchar(100) not null,
     phone varchar(15) not null,
@@ -64,7 +64,7 @@ create table supplier (
 
 create table admin_user (
     id int not null,
-    name_admin varchar(100) not null,
+    name varchar(100) not null,
     job_title varchar(50) not null,
     email varchar(100) not null,
     phone varchar(15) not null,
@@ -180,17 +180,17 @@ INSERT INTO author (id, name) VALUES
 (4, 'Stephen King'), 
 (5, 'Clarice Lispector');
 
-INSERT INTO admin_user (id, name_admin, job_title, email, phone) VALUES
+INSERT INTO admin_user (id, name, job_title, email, phone) VALUES
 (1, 'Anna Mayná',     'Administradora',         'anna@odisseia.com',    '75988887777'),
 (2, 'Diná Borges',    'Operadora de Logística', 'dina@odisseia.com',    '75988887779'),
 (3, 'Lismara Santos', 'Atendimento',            'lismara@odisseia.com', '75988887780');
 
-INSERT INTO supplier (id, name_supplier, cpf, email, phone, address) VALUES
+INSERT INTO supplier (id, name, cpf, email, phone, address) VALUES
 (1, 'Fornecedor Alpha', '10000000001', 'alpha@fornece.com',  '11999999991', 'Av. Paulista, 100'),
 (2, 'Fornecedor Beta',  '20000000002', 'beta@fornece.com',   '11999999992', 'Rua Augusta, 200'),
 (3, 'Sebo Esperança',   '30000000003', 'esperanca@sebo.com', '11999999993', 'Praça da Sé, 10');
 
-INSERT INTO customer (id, name_customer, cpf, Email, telefone, endereco) VALUES
+INSERT INTO customer (id, name, cpf, email, phone, address) VALUES
 (1, 'Carlos Mendes', '12345678901', 'carlos@mail.com', '75911112222', 'Rua Um, 10'),
 (2, 'Fernanda Lima', '12345678902', 'fernanda@mail.com', '75911112223', 'Rua Dois, 20'),
 (3, 'Julio Cesar', '12345678903', 'julio@mail.com', '75911112224', 'Rua Tres, 30'),
@@ -328,7 +328,7 @@ SELECT b.name_book AS "Título do Livro", bc.condition_description AS "Estado de
 FROM book b
 LEFT JOIN book_condition bc ON b.id_condition = bc.id;
 
-SELECT bo.id AS "ID do Pedido", c.name_customer AS "Nome do Cliente"
+SELECT bo.id AS "ID do Pedido", c.name AS "Nome do Cliente"
 FROM book_order bo
 INNER JOIN customer c ON bo.id_customer = c.id;
 
@@ -348,15 +348,15 @@ SELECT bo.total_value AS "Valor do Pedido", p.payment_method AS "Forma de Pagame
 FROM book_order bo
 INNER JOIN payment p ON bo.id = p.id_orders;
 
-SELECT c.name_customer AS "Cliente", bo.id AS "ID do Pedido", bo.date_orders AS "Data da Compra"
+SELECT c.name AS "Cliente", bo.id AS "ID do Pedido", bo.date_orders AS "Data da Compra"
 FROM customer c
 LEFT JOIN book_order bo ON c.id = bo.id_customer;
 
-SELECT s.name_supplier AS "Fornecedor", b.name_book AS "Título do Livro"
+SELECT s.name AS "Fornecedor", b.name_book AS "Título do Livro"
 FROM supplier s
 INNER JOIN book b ON s.id = b.id_supplier;
 
-SELECT s.name_supplier AS "Fornecedor", sc.donated_books_quantity AS "Livros Doados", sc.redemption_points AS "Pontos Acumulados"
+SELECT s.name AS "Fornecedor", sc.donated_books_quantity AS "Livros Doados", sc.redemption_points AS "Pontos Acumulados"
 FROM supplier_coupon sc
 INNER JOIN supplier s ON sc.id = s.id;
 
@@ -364,7 +364,7 @@ SELECT bc.condition_description AS "Estado de Conservação", b.name_book AS "T�
 FROM book b
 RIGHT JOIN book_condition bc ON b.id_condition = bc.id;
 
-SELECT a.name_admin AS "Administrador", b.name_book AS "Livro Cadastrado/Alterado"
+SELECT a.name AS "Administrador", b.name_book AS "Livro Cadastrado/Alterado"
 FROM admin_user a
 INNER JOIN book b ON a.id = b.id_admin;
 
