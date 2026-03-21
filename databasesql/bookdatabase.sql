@@ -282,8 +282,8 @@ INSERT INTO order_item (id_order, id_book) VALUES
 (21, 21), (22, 22), (23, 23), (24, 24), (25, 25), (26, 26), (27, 27), (28, 28), (29, 29), (30, 30);
 
 INSERT INTO payment (id, id_orders, id_type_payment, date_payment, total_value) VALUES
-(1, 1, 1, '2025-10-01', 50.00), -- 1 representa PIX
-(2, 2, 2, '2025-10-02', 35.50); -- 2 representa Cartão de Crédito
+(1, 1, 1, '2025-10-01', 50.00), 
+(2, 2, 2, '2025-10-02', 35.50); 
 
 INSERT INTO customer_shipping (id, id_orders, tracking_code, shipping_date, shipping_value) VALUES
 (1, 1, 'BR000000001BR', '2025-10-02', 15.00), (2, 2, 'BR000000002BR', '2025-10-03', 12.50),
