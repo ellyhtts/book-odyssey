@@ -73,9 +73,10 @@ create table admin_user (
 );
 
 create table author_publisher(
+	id int not null,
     id_author int not null,
     id_publisher int not null,
-    constraint pk_author_publisher primary key (id_author, id_publisher),
+    constraint pk_author_publisher primary key (id),
     constraint fk_ap_author foreign key (id_author) references author(id),
     constraint fk_ap_publisher foreign key (id_publisher) references publisher(id)
 );
@@ -323,6 +324,21 @@ INSERT INTO supplier_shipping (id, id_supplier, tracking_code, shipping_date, sh
 (27, 3, 'SUP000000027BR', '2025-09-27', 37.00), (28, 1, 'SUP000000028BR', '2025-09-28', 51.00),
 (29, 2, 'SUP000000029BR', '2025-09-29', 65.00), (30, 3, 'SUP000000030BR', '2025-09-30', 49.00);
 
+/*
+5. Book Odyssey - Livros Usados (ellyhtts)
+Left Join: Liste os títulos dos livros e a descrição do seu status de conservação (Novo, Seminovo, etc.).
+Inner Join: Recupere o ID do pedido e o nome completo do cliente que realizou a compra.
+Inner Join: Exiba o nome do livro e o nome da editora que o publicou.
+Left Join: Mostre todos os registros de logística (envios) e os IDs dos pedidos, incluindo pedidos que ainda não saíram para entrega.
+Inner Join: Relacione o livro com a categoria literária à qual ele foi associado.
+Inner Join: Mostre o valor do pedido e os detalhes da forma de pagamento escolhida pelo cliente.
+Left Join: Liste todos os clientes cadastrados e seu histórico de compras, incluindo aqueles que apenas criaram conta.
+Inner Join: Exiba o nome do fornecedor e o título do livro que ele disponibilizou para a loja.
+Inner Join: Relacione os cupons de fidelidade com o nome do fornecedor que acumulou os pontos.
+Right Join: Liste todos os estados de conservação possíveis e os livros vinculados a eles, mesmo estados que não têm exemplares no estoque.
+Inner Join: Mostre o nome do administrador e as alterações que ele realizou no catálogo de livros.
+Left Join: Exiba o título do livro e o custo do frete associado ao seu envio, mesmo para livros que nunca foram despachados.
+ */
 
 SELECT b.title AS "Título do Livro", bc.condition_description AS "Estado de Conservação"
 FROM book b
