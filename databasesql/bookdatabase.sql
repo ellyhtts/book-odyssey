@@ -109,9 +109,10 @@ create table book_order (
 );
 
 create table order_item (
+	id int not null,
     id_order int not null,
     id_book int not null,
-    constraint pk_order_item primary key (id_order, id_book),
+    constraint pk_order_item primary key (id),
     constraint fk_item_order foreign key (id_order) references book_order(id),
     constraint fk_item_book foreign key (id_book) references book(id)
 );
@@ -223,12 +224,12 @@ INSERT INTO customer (id, name, cpf, email, phone, address) VALUES
 (29, 'Alexandre Viana', '12345678929', 'alexandre@mail.com', '75911112250', 'Rua Vinte Nove, 290'),
 (30, 'Julia Carvalho', '12345678930', 'julia@mail.com', '75911112251', 'Rua Trinta, 300');
 
-INSERT INTO author_publisher (id_author, id_publisher) VALUES
-(1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
-(2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
-(3, 1), (3, 2), (3, 3), (3, 4), (3, 5),
-(4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
-(5, 1), (5, 2), (5, 3), (5, 4), (5, 5);
+INSERT INTO author_publisher (id, id_author, id_publisher) VALUES
+(1, 1, 1), (2, 1, 2), (3, 1, 3), (4, 1, 4), (5, 1, 5),
+(6, 2, 1), (7, 2, 2), (8, 2, 3), (9, 2, 4), (10, 2, 5),
+(11, 3, 1), (12, 3, 2), (13, 3, 3), (14, 3, 4), (15, 3, 5),
+(16, 4, 1), (17, 4, 2), (18, 4, 3), (19, 4, 4), (20, 4, 5),
+(21, 5, 1), (22, 5, 2), (23, 5, 3), (24, 5, 4), (25, 5, 5);
 
 INSERT INTO book (id, title, id_category, id_publisher, id_condition, id_supplier, id_admin) VALUES
 (1, 'Dom Casmurro Edição Especial', 1, 1, 1, 1, 1), (2, 'Harry Potter e a Pedra Filosofal', 3, 5, 2, 2, 2),
