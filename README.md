@@ -10,7 +10,6 @@ Este trabalho é parte integrante da disciplina de Linguagem SQL no curso de Sis
 * Diná Borges Azevedo
 * Maria Fabiana Silva Martins
 * Lismara Santos Moreira
-* Bianca Ribeiro de Almeida Barroca
 
 **Docente:** Jéfte Goes
 
