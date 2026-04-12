@@ -1,4 +1,4 @@
-NSERT INTO type_payment (id, description) VALUES
+INSERT INTO type_payment (id, description) VALUES
 (1, 'PIX'), (2, 'Cartão de Crédito'), (3, 'Boleto'), (4, 'Cartão de Débito');
 
 INSERT INTO category (id, genre, language) VALUES
