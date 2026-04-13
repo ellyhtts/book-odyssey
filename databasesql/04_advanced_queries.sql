@@ -28,3 +28,26 @@ LEFT JOIN book b
 GROUP BY c.genre
 ORDER BY "Quantidade de Livros" ASC;
 
+SELECT 
+    TO_CHAR(shipping_date, 'MM/YYYY') AS "Mês de Envio",
+    SUM(shipping_value) AS "Total Gasto com Frete"
+FROM customer_shipping
+GROUP BY TO_CHAR(shipping_date, 'MM/YYYY')
+ORDER BY "Mês de Envio" DESC;
+
+SELECT 
+    status AS "Fase do Pedido",
+    COUNT(*) AS "Quantidade de Pedidos"
+FROM book_order
+GROUP BY status
+ORDER BY "Quantidade de Pedidos" DESC;
+
+SELECT 
+    b.title AS "Livro",
+    cs.tracking_code AS "Código de Rastreio",
+    bo.status AS "Status Atual"
+FROM book b
+INNER JOIN order_item oi ON b.id = oi.id_book
+INNER JOIN book_order bo ON oi.id_order = bo.id
+INNER JOIN customer_shipping cs ON bo.id = cs.id_order
+ORDER  BY cs.shipping_date DESC;
