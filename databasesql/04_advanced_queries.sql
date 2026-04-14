@@ -51,3 +51,39 @@ INNER JOIN order_item oi ON b.id = oi.id_book
 INNER JOIN book_order bo ON oi.id_order = bo.id
 INNER JOIN customer_shipping cs ON bo.id = cs.id_order
 ORDER  BY cs.shipping_date DESC;
+
+-- 4 Group By: Some o total de pontos de fidelidade acumulados por cada fornecedor.
+SELECT 
+    s.name AS "Fornecedor",
+    SUM(sc.redemption_points) AS "Total de Pontos"
+FROM supplier s
+LEFT JOIN supplier_coupon sc
+    ON sc.id = s.id
+GROUP BY s.name
+ORDER BY "Total de Pontos" ASC;
+
+
+-- 5 Union: Gere uma lista com todos os nomes de autores e nomes de editoras.
+SELECT 
+    name AS "Nome", 
+    'Autor' AS "Categoria" 
+FROM author
+UNION
+SELECT 
+    name AS "Nome", 
+    'Editora' AS "Categoria" 
+FROM publisher
+ORDER BY "Nome" ASC;
+
+
+-- 9 Union: Liste os nomes de todos os compradores e os nomes de todos os fornecedores.
+SELECT 
+    name AS "Nome do Contato", 
+    'Cliente' AS "Tipo de Relação" 
+FROM customer
+UNION
+SELECT 
+    name AS "Nome do Contato", 
+    'Fornecedor' AS "Tipo de Relação" 
+FROM supplier
+ORDER BY "Nome do Contato" ASC;
