@@ -74,3 +74,16 @@ SELECT
     'Editora' AS "Categoria" 
 FROM publisher
 ORDER BY "Nome" ASC;
+
+
+-- 9 Union: Liste os nomes de todos os compradores e os nomes de todos os fornecedores.
+SELECT 
+    name AS "Nome do Contato", 
+    'Cliente' AS "Tipo de Relação" 
+FROM customer
+UNION
+SELECT 
+    name AS "Nome do Contato", 
+    'Fornecedor' AS "Tipo de Relação" 
+FROM supplier
+ORDER BY "Nome do Contato" ASC;
