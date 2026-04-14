@@ -61,3 +61,16 @@ LEFT JOIN supplier_coupon sc
     ON sc.id = s.id
 GROUP BY s.name
 ORDER BY "Total de Pontos" ASC;
+
+
+-- 5 Union: Gere uma lista com todos os nomes de autores e nomes de editoras.
+SELECT 
+    name AS "Nome", 
+    'Autor' AS "Categoria" 
+FROM author
+UNION
+SELECT 
+    name AS "Nome", 
+    'Editora' AS "Categoria" 
+FROM publisher
+ORDER BY "Nome" ASC;
