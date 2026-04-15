@@ -28,20 +28,21 @@ LEFT JOIN book b
 GROUP BY c.genre
 ORDER BY "Quantidade de Livros" ASC;
 
+-- 4 Group By: Calcula o valor total de frete pago agrupado por mês de envio.
 SELECT 
     TO_CHAR(shipping_date, 'MM/YYYY') AS "Mês de Envio",
     SUM(shipping_value) AS "Total Gasto com Frete"
 FROM customer_shipping
 GROUP BY TO_CHAR(shipping_date, 'MM/YYYY')
 ORDER BY "Mês de Envio" DESC;
-
+-- 5 Group By: Conta a quantidade de pedidos realizados para cada fase do status.
 SELECT 
     status AS "Fase do Pedido",
     COUNT(*) AS "Quantidade de Pedidos"
 FROM book_order
 GROUP BY status
 ORDER BY "Quantidade de Pedidos" DESC;
-
+-- 6 Group by: Lista os livros e seus respectivos códigos de rastreio e status atuais.
 SELECT 
     b.title AS "Livro",
     cs.tracking_code AS "Código de Rastreio",
@@ -52,7 +53,7 @@ INNER JOIN book_order bo ON oi.id_order = bo.id
 INNER JOIN customer_shipping cs ON bo.id = cs.id_order
 ORDER  BY cs.shipping_date DESC;
 
--- 4 Group By: Some o total de pontos de fidelidade acumulados por cada fornecedor.
+-- 7 Group By: Some o total de pontos de fidelidade acumulados por cada fornecedor.
 SELECT 
     s.name AS "Fornecedor",
     SUM(sc.redemption_points) AS "Total de Pontos"
@@ -63,7 +64,7 @@ GROUP BY s.name
 ORDER BY "Total de Pontos" ASC;
 
 
--- 5 Union: Gere uma lista com todos os nomes de autores e nomes de editoras.
+-- 8 Union: Gere uma lista com todos os nomes de autores e nomes de editoras.
 SELECT 
     name AS "Nome", 
     'Autor' AS "Categoria" 
