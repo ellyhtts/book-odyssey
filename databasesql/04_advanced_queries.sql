@@ -55,27 +55,27 @@ UNION ALL
 SELECT b.title AS "Título do Livro", 'Doado/Fornecedor' AS "Origem" FROM book b
 WHERE b.id_supplier IS NOT NULL;
 
--- Group By: Liste a quantidade de livros cadastrados para cada editora.
+-- 7 Intersect: Identifique clientes que compraram tanto livros de "Romance" quanto de "Ficção".
+SELECT c.name AS "Cliente" FROM customer c
+JOIN book_order bo ON c.id = bo.id_customer
+JOIN order_item oi ON bo.id = oi.id_order
+JOIN book b ON oi.id_book = b.id
+WHERE b.id_category = 1 -- Romance
+INTERSECT
+SELECT c.name AS "Cliente" FROM customer c
+JOIN book_order bo ON c.id = bo.id_customer
+JOIN order_item oi ON bo.id = oi.id_order
+JOIN book b ON oi.id_book = b.id
+WHERE b.id_category = 2; -- Ficção
+
+-- 8 Group By: Calcule o valor médio de venda dos livros agrupados por categoria literária.
 SELECT 
-    c.genre AS "Gênero Literário",
-    COUNT(b.id) AS "Quantidade de Livros"
+    c.genre AS "Categoria Literária", 
+    ROUND(AVG(oi.sell_price), 2) AS "Valor Médio de Venda"
 FROM category c
-LEFT JOIN book b 
-    ON b.id_category = c.id
-GROUP BY c.genre
-ORDER BY "Quantidade de Livros" ASC;
-
-
--- Group by: Lista os livros e seus respectivos códigos de rastreio e status atuais.
-SELECT 
-    b.title AS "Livro",
-    cs.tracking_code AS "Código de Rastreio",
-    bo.status AS "Status Atual"
-FROM book b
-INNER JOIN order_item oi ON b.id = oi.id_book
-INNER JOIN book_order bo ON oi.id_order = bo.id
-INNER JOIN customer_shipping cs ON bo.id = cs.id_order
-ORDER  BY cs.shipping_date DESC;
+JOIN book b ON c.id = b.id_category
+JOIN order_item oi ON b.id = oi.id_book
+GROUP BY c.genre;
 
 -- 9.Union: Liste os nomes de todos os compradores e os nomes de todos os fornecedores. 
 SELECT 
