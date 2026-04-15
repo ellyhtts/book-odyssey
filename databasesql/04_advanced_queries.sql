@@ -44,7 +44,7 @@ FROM book_order
 GROUP BY status
 ORDER BY "Quantidade de Pedidos" DESC;
 
--- 6 Group by: Lista os livros e seus respectivos códigos de rastreio e status atuais.
+-- 6 Join: Lista os livros e seus respectivos códigos de rastreio e status atuais.
 SELECT 
     b.title AS "Livro",
     cs.tracking_code AS "Código de Rastreio",
