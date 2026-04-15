@@ -35,6 +35,7 @@ SELECT
 FROM customer_shipping
 GROUP BY TO_CHAR(shipping_date, 'MM/YYYY')
 ORDER BY "Mês de Envio" DESC;
+
 -- 5 Group By: Conta a quantidade de pedidos realizados para cada fase do status.
 SELECT 
     status AS "Fase do Pedido",
@@ -42,6 +43,7 @@ SELECT
 FROM book_order
 GROUP BY status
 ORDER BY "Quantidade de Pedidos" DESC;
+
 -- 6 Group by: Lista os livros e seus respectivos códigos de rastreio e status atuais.
 SELECT 
     b.title AS "Livro",
