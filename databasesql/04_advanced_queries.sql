@@ -87,3 +87,24 @@ SELECT
     'Fornecedor' AS "Tipo de Relação" 
 FROM supplier
 ORDER BY "Nome do Contato" ASC;
+
+-- 10 Group By: Conte o total de pedidos agrupados por status (Pendente, Pago, Enviado).
+SELECT status, COUNT(id) AS total_pedidos
+FROM book_order
+GROUP BY status; 
+
+-- 11 Intersect: Encontre livros que estão no catálogo e que possuem um código de rastreio de logística associado.
+SELECT 
+	b.title FROM book b
+INTERSECT
+SELECT 
+	b.title FROM book b
+JOIN order_item oi ON b.id = oi.id_book
+JOIN customer_shipping cs ON oi.id_order = cs.id_order;
+
+--12 Group By: Liste o total de exemplares disponíveis agrupado por categoria.
+SELECT 
+	c.genre, COUNT(b.id) as exemplares_disponiveis
+FROM book b
+JOIN category c ON b.id_category = c.id
+GROUP BY c.genre;
