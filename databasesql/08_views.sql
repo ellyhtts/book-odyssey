@@ -7,6 +7,3 @@ FROM book b
 INNER JOIN category c ON b.id_category = c.id
 INNER JOIN book_condition bc ON b.id_condition = bc.id
 ORDER BY bc.condition_description ASC;
-
-
-select * from catalogoporestado;
