@@ -24,3 +24,29 @@ before insert on book
 for each row
 execute function calculapreconocadastro();
 
+------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION fn_gerar_pontos_doacao()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.id_supplier IS NOT NULL THEN 
+        UPDATE supplier_coupon
+        SET donated_books_quantity = donated_books_quantity + 1,
+            redemption_points = redemption_points + 10 
+        WHERE id = NEW.id_supplier;
+        
+        IF NOT FOUND THEN
+            INSERT INTO supplier_coupon (id, donated_books_quantity, redemption_points)
+            VALUES (NEW.id_supplier, 1, 10);
+        END IF;
+        
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_gerar_pontos_doacao
+AFTER INSERT ON book
+FOR EACH ROW
+EXECUTE FUNCTION fn_gerar_pontos_doacao();
+
