@@ -19,7 +19,7 @@ raise notice 'regra de depreciação atualizada para a condição % ', p_conditi
 $procedure$
 ;
 
-
+---------------------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE ResgatarPontosFidelidade(
     p_supplier_id INT,
     p_redemption_points INT
