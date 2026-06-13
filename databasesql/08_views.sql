@@ -19,3 +19,18 @@ SELECT
 FROM supplier s
 LEFT JOIN supplier_coupon sc ON s.id = sc.id
 ORDER BY "Posição" ASC;
+
+------------------------------------------------------------
+
+CREATE OR REPLACE VIEW public.logistic_tracking
+AS SELECT bo.id AS "ID do Pedido",
+    c.name AS "Cliente",
+    bo.status AS "Status",
+    cs.tracking_code AS "Código de Rastreio",
+    cs.shipping_date AS "Data de Envio",
+    to_char(cs.shipping_date::timestamp with time zone, 'MM/YYYY'::text) AS "Mês de Referência",
+    cs.shipping_value AS "Valor do Frete"
+   FROM book_order bo
+     JOIN customer c ON bo.id_customer = c.id
+     JOIN customer_shipping cs ON bo.id = cs.id_order
+  ORDER BY cs.shipping_date DESC;
