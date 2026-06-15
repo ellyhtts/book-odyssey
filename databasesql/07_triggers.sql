@@ -50,3 +50,29 @@ AFTER INSERT ON book
 FOR EACH ROW
 EXECUTE FUNCTION fn_gerar_pontos_doacao();
 
+-- ---------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION trg_AtualizaEstoqueVenda_Func()
+RETURNS TRIGGER AS $$
+BEGIN
+    
+    IF NEW.status = 'Pago' AND OLD.status IS DISTINCT FROM 'Pago' THEN
+        
+        UPDATE book
+        SET is_active = FALSE 
+        WHERE id IN (
+            SELECT id_book
+            FROM order_item
+            WHERE id_order = NEW.id
+        );
+        
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER AtualizaEstoqueVenda
+AFTER UPDATE OF status ON book_order
+FOR EACH ROW
+EXECUTE FUNCTION trg_AtualizaEstoqueVenda_Func();
