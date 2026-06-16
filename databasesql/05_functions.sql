@@ -1,5 +1,5 @@
 -- Function: Recebe o ID do livro e retorna o estado físico (condição) detalhado.
-CREATE OR REPLACE FUNCTION ObterStatusConservacao(p_book_id INT)
+CREATE OR REPLACE FUNCTION get_book_condition(p_book_id INT)
 RETURNS VARCHAR AS $$
 DECLARE
     v_estado_fisico VARCHAR;
@@ -14,7 +14,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Function: Recebe o ID da editora e retorna o valor financeiro total arrecadado.
-CREATE OR REPLACE FUNCTION TotalVendasPorEditora(p_publisher_id INT)
+CREATE OR REPLACE FUNCTION get_total_sales_by_publisher (p_publisher_id INT)
 RETURNS NUMERIC AS $$
 DECLARE
     v_total_arrecadado NUMERIC;
