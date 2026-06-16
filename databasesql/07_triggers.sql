@@ -3,7 +3,7 @@
 alter table book add column if not exists base_price DECIMAL(10,2);
 alter table book add column if not exists final_price DECIMAL(10,2);
 
-CREATE OR REPLACE FUNCTION calculapreconocadastro()
+CREATE OR REPLACE FUNCTION fn_calculate_price_on_insert()
 	RETURNS trigger as $$
 	declare 
 	v_depreciacao decimal (5,2);
@@ -19,14 +19,14 @@ return new;
 	END;
 $$ LANGUAGE plpgsql;
 
-create trigger calcula_preco
+create trigger trg_calculate_price
 before insert on book 
 for each row
-execute function calculapreconocadastro();
+execute function fn_calculate_price_on_insert();
 
 ------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION fn_gerar_pontos_doacao()
+CREATE OR REPLACE FUNCTION fn_generate_donation_points()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.id_supplier IS NOT NULL THEN 
@@ -45,14 +45,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_gerar_pontos_doacao
+CREATE OR REPLACE TRIGGER trg_generate_donation_points
 AFTER INSERT ON book
 FOR EACH ROW
-EXECUTE FUNCTION fn_gerar_pontos_doacao();
+EXECUTE FUNCTION fn_generate_donation_points();
 
 -- ---------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION trg_AtualizaEstoqueVenda_Func()
+CREATE OR REPLACE FUNCTION fn_update_stock_on_sale()
 RETURNS TRIGGER AS $$
 BEGIN
     
@@ -72,7 +72,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER AtualizaEstoqueVenda
+CREATE TRIGGER trg_update_stock_on_sale
 AFTER UPDATE OF status ON book_order
 FOR EACH ROW
-EXECUTE FUNCTION trg_AtualizaEstoqueVenda_Func();
+EXECUTE FUNCTION fn_update_stock_on_sale();
