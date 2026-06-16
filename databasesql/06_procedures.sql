@@ -47,3 +47,34 @@ BEGIN
     RAISE NOTICE 'Resgate realizado com sucesso! % pontos deduzidos do fornecedor ID %.', p_redemption_points, p_supplier_id;
 END;
 $$;
+
+-----------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS process_shipping(INT, VARCHAR, VARCHAR);
+
+CREATE OR REPLACE PROCEDURE process_shipping(
+    p_id_order INT,
+    p_tracking_code VARCHAR(50),
+    p_state_code VARCHAR(2) 
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_new_shipping_id INT;
+    v_freight_value DECIMAL(10,2);
+BEGIN
+    UPDATE book_order
+    SET status = 'Shipped' 
+    WHERE id = p_id_order;
+
+    v_freight_value := calculate_estimated_freight(p_state_code);
+
+    SELECT COALESCE(MAX(id), 0) + 1 INTO v_new_shipping_id FROM customer_shipping;
+
+    INSERT INTO customer_shipping (id, id_order, tracking_code, shipping_date, shipping_value)
+    VALUES (v_new_shipping_id, p_id_order, p_tracking_code, CURRENT_DATE, v_freight_value);
+
+    RAISE NOTICE 'Order % updated to Shipped. Tracking Code: %. Freight: $ %', 
+                 p_id_order, p_tracking_code, v_freight_value;
+END;
+$$;
