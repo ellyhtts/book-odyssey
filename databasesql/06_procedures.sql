@@ -1,16 +1,16 @@
 
 -- DROP PROCEDURE public.aplicardepreciacao();
 
-CREATE OR REPLACE PROCEDURE apply_depreciation(p_condition_id int, p_nova_depreciacao decimal(10,2))
+CREATE OR REPLACE PROCEDURE apply_depreciation(p_condition_id int, p_new_depreciation decimal(10,2))
 	LANGUAGE plpgsql
 AS $procedure$
 	BEGIN
 update book_condition 
-set price_depreciation = p_nova_depreciacao 
+set price_depreciation = p_new_depreciation
 where id = p_condition_id;
 
 update book 
-set final_price = base_price - p_nova_depreciacao
+set final_price = base_price - p_new_depreciation
 where id_condition = p_condition_id;
 
 raise notice 'regra de depreciação atualizada para a condição % ', p_condition_id;
