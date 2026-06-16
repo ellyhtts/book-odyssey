@@ -1,4 +1,3 @@
--- DROP PROCEDURE public.aplicardepreciacao();
 
 -- DROP PROCEDURE public.aplicardepreciacao();
 
