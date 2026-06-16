@@ -1,4 +1,4 @@
-CREATE OR replace VIEW catalogoporestado AS SELECT 
+CREATE OR replace VIEW view_catalog_by_condition AS SELECT 
 b.title AS "titulo do livro",
 c.genre AS "gênero", 
 bc.condition_description AS "estado de conservação",
@@ -10,7 +10,7 @@ ORDER BY bc.condition_description ASC;
 
 -----------------------------------------------------------
 
-CREATE OR REPLACE VIEW LeaderboardFornecedores AS
+CREATE OR REPLACE VIEW view_supplier_leaderboard AS
 SELECT 
     DENSE_RANK() OVER (ORDER BY COALESCE(sc.donated_books_quantity, 0) DESC) AS "Posição",
     s.name AS "Fornecedor",
