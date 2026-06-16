@@ -12,6 +12,7 @@ BEGIN
     RETURN COALESCE(v_estado_fisico, 'Status não cadastrado para este livro');
 END;
 $$ LANGUAGE plpgsql;
+---------------------------------------------------------------
 
 -- Function: Recebe o ID da editora e retorna o valor financeiro total arrecadado.
 CREATE OR REPLACE FUNCTION get_total_sales_by_publisher (p_publisher_id INT)
@@ -28,6 +29,7 @@ BEGIN
     RETURN v_total_arrecadado;
 END;
 $$ LANGUAGE plpgsql;
+---------------------------------------------------
 
 CREATE OR REPLACE FUNCTION public.calculate_estimated_freight(p_estado character varying)
  RETURNS numeric
