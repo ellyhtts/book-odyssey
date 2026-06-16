@@ -2,7 +2,7 @@
 
 -- DROP PROCEDURE public.aplicardepreciacao();
 
-CREATE OR REPLACE PROCEDURE aplicardepreciacao(p_condition_id int, p_nova_depreciacao decimal(10,2))
+CREATE OR REPLACE PROCEDURE apply_depreciation(p_condition_id int, p_nova_depreciacao decimal(10,2))
 	LANGUAGE plpgsql
 AS $procedure$
 	BEGIN
@@ -20,7 +20,7 @@ $procedure$
 ;
 
 ---------------------------------------------------------------------------------------
-CREATE OR REPLACE PROCEDURE ResgatarPontosFidelidade(
+CREATE OR REPLACE PROCEDURE redeem_fidelity_points(
     p_supplier_id INT,
     p_redemption_points INT
 )
